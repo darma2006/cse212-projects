@@ -20,10 +20,28 @@ public static class SetsAndMaps
     /// </summary>
     /// <param name="words">An array of 2-character words (lowercase, no duplicates)</param>
     public static string[] FindPairs(string[] words)
+{
+    var set = new HashSet<string>();
+    var results = new List<string>();
+
+    foreach (var word in words)
     {
-        // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
+        string reverse = $"{word[1]}{word[0]}";
+
+        // Ignore words like "aa"
+        if (word[0] == word[1])
+            continue;
+
+        if (set.Contains(reverse))
+        {
+            results.Add($"{reverse} & {word}");
+        }
+
+        set.Add(word);
     }
+
+    return results.ToArray();
+}
 
     /// <summary>
     /// Read a census file and summarize the degrees (education)
@@ -42,7 +60,16 @@ public static class SetsAndMaps
         foreach (var line in File.ReadLines(filename))
         {
             var fields = line.Split(",");
-            // TODO Problem 2 - ADD YOUR CODE HERE
+            string degree = fields[3].Trim();
+
+if (degrees.ContainsKey(degree))
+{
+    degrees[degree]++;
+}
+else
+{
+    degrees[degree] = 1;
+}
         }
 
         return degrees;
@@ -65,10 +92,36 @@ public static class SetsAndMaps
     /// using the [] notation.
     /// </summary>
     public static bool IsAnagram(string word1, string word2)
-    {
-        // TODO Problem 3 - ADD YOUR CODE HERE
+{
+    word1 = word1.Replace(" ", "").ToLower();
+    word2 = word2.Replace(" ", "").ToLower();
+
+    if (word1.Length != word2.Length)
         return false;
+
+    Dictionary<char, int> letters = new();
+
+    foreach (char c in word1)
+    {
+        if (letters.ContainsKey(c))
+            letters[c]++;
+        else
+            letters[c] = 1;
     }
+
+    foreach (char c in word2)
+    {
+        if (!letters.ContainsKey(c))
+            return false;
+
+        letters[c]--;
+
+        if (letters[c] == 0)
+            letters.Remove(c);
+    }
+
+    return letters.Count == 0;
+}
 
     /// <summary>
     /// This function will read JSON (Javascript Object Notation) data from the 
